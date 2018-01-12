@@ -6,7 +6,7 @@
  * Time: 9:58
  */
 
-namespace App\Models;
+namespace App\Libraries;
 use Illuminate\Validation;
 use Illuminate\Filesystem;
 use Illuminate\Translation;
@@ -29,7 +29,12 @@ class Validator
 
     static function make($data, $rules, $messages)
     {
-        $validator = new Validator();
+        static $validator;
+
+        if (empty($validator)) {
+            $validator = new Validator();
+        }
+
         $factory = $validator->getFactory();
 
         return $factory->make($data, $rules, $messages);

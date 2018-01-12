@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 use App\Models\Admin;
 use Illuminate\Database\Capsule\Manager as Capsule;
 
-use App\Models\Validator;
+use App\Libraries\Validator;
 
 class Home extends CI_Controller {
 
@@ -24,9 +24,15 @@ class Home extends CI_Controller {
 		$this->load->view('home/index', ['list' => $list]);
 	}
 
+	public function blade() {
+	    $users = Admin::all();
+
+	    $this->blade->view('home.index', ['list' => $users]);
+
+    }
+
     public function val()
     {
-
         $messages = [
             'required' => 'The :attribute field is required.',
         ];
@@ -46,5 +52,15 @@ class Home extends CI_Controller {
                 var_dump($message);
             }
         }
+
+        $validator = Validator::make($dataToValidate, $rules, $messages);
+
+        if($validator->fails()){
+            $errors = $validator->errors();
+            foreach($errors->all() as $message){
+                var_dump($message);
+            }
+        }
+
 	}
 }
